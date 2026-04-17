@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
-    private int counter = 0;
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
@@ -24,9 +23,7 @@ public class Robot extends TimedRobot {
      * updating.
      */
     @Override
-    public void robotPeriodic() {
-        counter++;
-    }
+    public void robotPeriodic() {}
 
     /**
      * This autonomous (along with the chooser code above) shows how to select between different autonomous modes using
@@ -47,9 +44,7 @@ public class Robot extends TimedRobot {
 
     /** This function is called once when teleop is enabled. */
     @Override
-    public void teleopInit() {
-        System.out.println(counter);
-    }
+    public void teleopInit() {}
 
     /** This function is called periodically during operator control. */
     @Override
