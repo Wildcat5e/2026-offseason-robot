@@ -1,6 +1,11 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -8,11 +13,23 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+    public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+
+    CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
+    XboxController controller = new XboxController(0);
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {}
+
+    public void controllerTesting() {
+        drivetrain.applyRequest(() -> {
+            return swerveRequest.withVelocityX(controller.getLeftY() * MAX_LINEAR_SPEED);
+        });
+        controller.getLeftY();
+    }
 
     /**
      * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics that you want ran
