@@ -26,8 +26,11 @@ public class Robot extends TimedRobot {
 
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
+            swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
             return swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
+
         }));
+        // Add functionallity for left & right as well as rotate (rotate with right controller).
     }
 
     /**
