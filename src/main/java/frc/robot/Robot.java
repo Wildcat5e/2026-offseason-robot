@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.generated.TunerConstants;
@@ -14,6 +15,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
  */
 public class Robot extends TimedRobot {
     public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
+    static final double DEADZONE = .15;
+
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
@@ -27,10 +31,10 @@ public class Robot extends TimedRobot {
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
             swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
-            return swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
-
+            swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
+            return swerveRequest
+                .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
-        // Add functionallity for left & right as well as rotate (rotate with right controller).
     }
 
     /**
