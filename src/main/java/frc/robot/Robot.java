@@ -4,6 +4,9 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -17,17 +20,27 @@ public class Robot extends TimedRobot {
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
-    XboxController controller = new XboxController(0);
+    CommandXboxController controller = createController();
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {}
 
+
+    CommandXboxController createController() {
+        return new CommandXboxController(0);
+    }
+
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
             return swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
         }));
+
+        Command ree;
+
+
+        controller.leftTrigger().whileTrue(ree);
     }
 
     /**
