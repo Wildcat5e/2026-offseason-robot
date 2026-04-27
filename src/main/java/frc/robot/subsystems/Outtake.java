@@ -10,8 +10,22 @@ public class Outtake implements Subsystem {
     private final TalonFX rightFlywheelMotor = new TalonFX(20);
     private final TalonFX kickerMotor = new TalonFX(14);
     private final TalonFX conveyorMotor = new TalonFX(15);
+    double flywheelVoltage = 3;
+    double kickerVoltage = 3;
+    double conveyorVoltage = 3;
+    // replace with real values from on 2026 rebuilt robot if you deploy
 
     public Command shoot() {
-        return runOnce(() -> System.out.println("hi "));
+        return startEnd(() -> {
+            leftFlywheelMotor.setVoltage(flywheelVoltage);
+            rightFlywheelMotor.setVoltage(flywheelVoltage);
+            kickerMotor.setVoltage(kickerVoltage);
+            conveyorMotor.setVoltage(conveyorVoltage);
+        }, () -> {
+            leftFlywheelMotor.setVoltage(0);
+            rightFlywheelMotor.setVoltage(0);
+            kickerMotor.setVoltage(0);
+            conveyorMotor.setVoltage(0);
+        });
     }
 }
