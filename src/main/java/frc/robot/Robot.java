@@ -5,6 +5,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -30,7 +32,10 @@ public class Robot extends TimedRobot {
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
-    public Robot() {}
+    public Robot() {
+        controllerTesting();
+        buttonBinding();
+    }
 
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
@@ -40,9 +45,12 @@ public class Robot extends TimedRobot {
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
 
-        controller.rightTrigger().whileTrue(outtake.shoot());
-
         //spin outtake wheels
+    }
+
+
+    public void buttonBinding() {
+        controller.rightTrigger().whileTrue(outtake.shoot());
     }
 
     /**
@@ -54,7 +62,9 @@ public class Robot extends TimedRobot {
      * updating.
      */
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 
     /** This function is called once when auton is enabled. */
     @Override
