@@ -4,9 +4,11 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Outtake;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -17,11 +19,13 @@ public class Robot extends TimedRobot {
     public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
     static final double DEADZONE = .15;
+    Outtake outtake = new Outtake();
+    EventLoop shooting;
 
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
-    XboxController controller = new XboxController(0);
+    CommandXboxController controller = new CommandXboxController(0);
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
@@ -35,6 +39,10 @@ public class Robot extends TimedRobot {
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
+
+        controller.rightTrigger().whileTrue(outtake.shoot());
+
+        //spin outtake wheels
     }
 
     /**
