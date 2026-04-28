@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Outtake;
+import frc.robot.subsystems.Intake;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
     static final double DEADZONE = .15;
     Outtake outtake = new Outtake();
+    Intake intake = new Intake();
     EventLoop shooting;
 
 
@@ -33,24 +35,23 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {
-        controllerTesting();
+        drivetrainControllerBinding();
         buttonBinding();
     }
 
-    public void controllerTesting() {
+    public void drivetrainControllerBinding() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
             swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
             swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
-
-        //spin outtake wheels
     }
 
 
     public void buttonBinding() {
         controller.rightTrigger().whileTrue(outtake.shoot());
+        controller.leftTrigger().whileTrue(intake.spin());
     }
 
     /**
