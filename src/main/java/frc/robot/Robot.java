@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
             swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
             swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
+
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
@@ -52,6 +53,8 @@ public class Robot extends TimedRobot {
     public void buttonBinding() {
         controller.rightTrigger().whileTrue(outtake.shoot());
         controller.leftTrigger().whileTrue(intake.spin());
+
+        controller.rightBumper().whileTrue(intake.extendIntake());
     }
 
     /**
