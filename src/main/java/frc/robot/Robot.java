@@ -5,9 +5,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
 
 /**
@@ -21,6 +23,7 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     Outtake outtake = new Outtake();
     EventLoop shooting;
+    Intake intake = new Intake();
 
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -31,7 +34,8 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {
-        
+        controllerTesting();
+
     }
 
     public void controllerTesting() {
@@ -43,6 +47,8 @@ public class Robot extends TimedRobot {
         }));
 
         controller.rightTrigger().whileTrue(outtake.shoot());
+        controller.leftBumper().whileTrue(intake.IntakeUp());
+        controller.leftTrigger().whileTrue(intake.IntakeDown());
 
         //spin outtake wheels
     }
@@ -56,15 +62,15 @@ public class Robot extends TimedRobot {
      * updating.
      */
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 
-    /**This function runs when the robot is first started up. Use it for set up tasks
-     * like connecting controllers
+    /**
+     * This function runs when the robot is first started up. Use it for set up tasks like connecting controllers
      */
     @Override
-    public void robotInit() {
-        controllerTesting();
-    }
+    public void robotInit() {}
 
     /** This function is called once when auton is enabled. */
     @Override
