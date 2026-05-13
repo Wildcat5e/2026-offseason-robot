@@ -40,8 +40,8 @@ public class Robot extends TimedRobot {
 
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
-            swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
-            swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
+            swerveRequest.withVelocityY(MathUtil.applyDeadband(-controller.getLeftX(), DEADZONE) * MAX_LINEAR_SPEED);
+            swerveRequest.withVelocityX(MathUtil.applyDeadband(-controller.getLeftY(), DEADZONE) * MAX_LINEAR_SPEED);
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
@@ -49,8 +49,11 @@ public class Robot extends TimedRobot {
         controller.leftBumper().whileTrue(intake.IntakeUp());
         controller.leftTrigger().whileTrue(intake.IntakeDown());
         controller.rightBumper().onTrue(intake.fullyIntakeUp());
-        controller.rightTrigger().whileTrue(intake.intakeFuel());
+        controller.rightTrigger().onTrue(intake.fullyIntakeDown());
+        controller.y().whileTrue(intake.intakeFuel());
+        controller.x().onTrue(intake.setExtenderPositionZero());
     }
+
 
     /**
      * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics that you want ran

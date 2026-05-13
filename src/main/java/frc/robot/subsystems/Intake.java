@@ -36,20 +36,24 @@ public class Intake extends SubsystemBase {
 
     // get new data, intake pushed too far in
     public Command fullyIntakeUp() {
-        final double tolerance = 0.001;
+        final double tolerance = 0.03;
         return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(1),
             (interrupted) -> extenderMotor.setVoltage(0), () -> {
-                return Math.abs((extenderMotor.getPosition().getValueAsDouble() - 0.3300)) <= tolerance;
+                return (extenderMotor.getPosition().getValueAsDouble() >= -0.05 - tolerance);
             }, this);
     }
 
     // get new data, data was when the chain was being bent
     public Command fullyIntakeDown() {
-        final double tolerance = 0.001;
+        final double tolerance = 0.01;
         return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(-1),
             (interrupted) -> extenderMotor.setVoltage(0), () -> {
-                return Math.abs((extenderMotor.getPosition().getValueAsDouble() + 0.0405)) >= tolerance;
+                return (extenderMotor.getPosition().getValueAsDouble() <= -0.28076171875 + tolerance);
             }, this);
+    }
+
+    public Command setExtenderPositionZero() {
+        return runOnce(() -> extenderMotor.setPosition(0));
     }
 
 
