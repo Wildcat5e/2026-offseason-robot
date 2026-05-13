@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -33,6 +34,38 @@ public class Intake extends SubsystemBase {
         return startEnd(() -> extenderMotor.setVoltage((-1)), () -> extenderMotor.setVoltage(0));
     }
 
+    // get new data, intake pushed too far in
+    public Command fullyIntakeUp() {
+        final double tolerance = 0.001;
+        return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(1),
+            (interrupted) -> extenderMotor.setVoltage(0), () -> {
+                return Math.abs((extenderMotor.getPosition().getValueAsDouble() - 0.3300)) <= tolerance;
+            }, this);
+    }
+
+    // get new data, data was when the chain was being bent
+    public Command fullyIntakeDown() {
+        final double tolerance = 0.001;
+        return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(-1),
+            (interrupted) -> extenderMotor.setVoltage(0), () -> {
+                return Math.abs((extenderMotor.getPosition().getValueAsDouble() + 0.0405)) >= tolerance;
+            }, this);
+    }
+
+
+    // public Command fullyIntakeUp() {
+    //     return startEnd(() -> {
+    //         do {
+    //             extenderMotor.setVoltage(1);
+    //         } while (extenderMotor.getPosition().getValueAsDouble() != (0.34106));
+    //     }, () -> extenderMotor.setVoltage(0));
+    // }
+
+    public Command intakeFuel() {
+        return startEnd(() -> scooperMotor.setVoltage(1), () -> scooperMotor.setVoltage(0));
+    }
+
+    // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits
 
     @Override
     public void periodic() {

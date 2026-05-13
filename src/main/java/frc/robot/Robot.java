@@ -46,11 +46,10 @@ public class Robot extends TimedRobot {
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
 
-        controller.rightTrigger().whileTrue(outtake.shoot());
         controller.leftBumper().whileTrue(intake.IntakeUp());
         controller.leftTrigger().whileTrue(intake.IntakeDown());
-
-        //spin outtake wheels
+        controller.rightBumper().onTrue(intake.fullyIntakeUp());
+        controller.rightTrigger().whileTrue(intake.intakeFuel());
     }
 
     /**
