@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
     RotateToHub rotateToHub = new RotateToHub();
     EventLoop shooting;
 
-
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
@@ -43,8 +42,9 @@ public class Robot extends TimedRobot {
         buttonBinding();
 
         SmartDashboard.putData("Field", fieldWidget);
-        // Ask Adi what this is about, its for PID/RotateToHub somehow
+        // Ask Adi what this is about, its for PID/RotateToHub somehow.
     }
+
 
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
@@ -56,10 +56,9 @@ public class Robot extends TimedRobot {
         }));
     }
 
-
     public void buttonBinding() {
         controller.rightTrigger().whileTrue(outtake.shoot());
-        controller.a().whileTrue(rotateToHub.rotateToHub());
+        controller.a().whileTrue(rotateToHub);
     }
 
     /**
