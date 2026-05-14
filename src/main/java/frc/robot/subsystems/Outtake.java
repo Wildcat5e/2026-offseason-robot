@@ -13,7 +13,9 @@ public class Outtake implements Subsystem {
     double flywheelVoltage = 2;
     double kickerVoltage = 4;
     double conveyorVoltage = 8;
-    // replace with real values from on 2026 rebuilt robot if you deploy
+    // TODO: replace with real values from the robot
+    // Im not sure if these are the correct numbers.
+    double targetFlywheelSpeed;
 
     public Command shoot() {
         return startEnd(() -> {
@@ -27,5 +29,9 @@ public class Outtake implements Subsystem {
             kickerMotor.setVoltage(0);
             conveyorMotor.setVoltage(0);
         });
+    }
+
+    public void setFlywheelVel(double targetFlywheelSpeed) {
+        //TODO: Replace this placeholder so that RotateToHub can actually shoot 
     }
 }

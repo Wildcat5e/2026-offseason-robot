@@ -1,19 +1,12 @@
 package frc.robot.subsystems;
 
-import java.lang.ModuleLayer.Controller;
 import java.util.Map;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class CalcShortForCalculator {
@@ -26,6 +19,8 @@ public class CalcShortForCalculator {
     static boolean isBlueAlliance;
     static Translation2d targetHubPosition;
     static double HOOD_ANGLE_RADIANS = Math.toRadians(64);
+    static double flywheelMultiplyer = 0;
+    //TODO: find the correct flywheelMultiplyer
 
 
     //returns a feild angle
@@ -41,6 +36,18 @@ public class CalcShortForCalculator {
     }
 
     static double distanceSq(CommandSwerveDrivetrain drivetrain) {
+        DriverStation.getAlliance().ifPresent(fms_alliance -> isBlueAlliance = fms_alliance == Alliance.Blue);
+        Pose2d currentPose = drivetrain.getState().Pose;
+
+        targetHubPosition = isBlueAlliance ? BLUE_HUB_POSITION : RED_HUB_POSITION;
+
+        double deltaX = targetHubPosition.getX() - currentPose.getX();
+        double deltaY = targetHubPosition.getY() - currentPose.getY();
+
+        return sq(deltaX) + sq(deltaY);
+    }
+
+    static double distance(CommandSwerveDrivetrain drivetrain) {
         DriverStation.getAlliance().ifPresent(fms_alliance -> isBlueAlliance = fms_alliance == Alliance.Blue);
         Pose2d currentPose = drivetrain.getState().Pose;
 
@@ -74,11 +81,15 @@ public class CalcShortForCalculator {
         ChassisSpeeds robotVel = drivetrain.getState().Speeds;
         robotVel = ChassisSpeeds.fromRobotRelativeSpeeds(robotVel, drivetrain.getState().Pose.getRotation());
         Translation2d robotVector = new Translation2d(robotVel.vxMetersPerSecond, robotVel.vyMetersPerSecond);
-
-        double basicFlywheelSpeed = flywheelSpeeds.get(Math.sqrt(distanceSq(drivetrain)));
-        double magnitude = basicFlywheelSpeed * Math.cos(HOOD_ANGLE_RADIANS);
-
-       double targetAngle
+        double FlywheelSpeed2d = flywheelSpeeds.get(Math.sqrt(distanceSq(drivetrain)));
+        double shotVector2d = FlywheelSpeed2d * Math.cos(HOOD_ANGLE_RADIANS);
+        Translation2d hubVector = new Translation2d(shotVector2d, new Rotation2d(theta(drivetrain)));
+        Translation2d shotVector = hubVector.minus(robotVector);
+        double targetHeading = shotVector.getAngle().getRadians();
+        double finalFLywheelSpeed2d = shotVector.getNorm();
+        double finalFlywheelSpeed = finalFLywheelSpeed2d / Math.cos(HOOD_ANGLE_RADIANS);
+        finalFlywheelSpeed = finalFlywheelSpeed * flywheelMultiplyer;
+        return new ShootingInfo(finalFlywheelSpeed, targetHeading);
     }
 
 
