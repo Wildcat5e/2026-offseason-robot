@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class Intake extends SubsystemBase {
     /** Creates a new Intake. */
 
@@ -23,9 +24,7 @@ public class Intake extends SubsystemBase {
 
     }
 
-    // public Command bringIntakeUp() {
 
-    // }
     public Command IntakeUp() {
         return startEnd(() -> extenderMotor.setVoltage((1)), () -> extenderMotor.setVoltage(0));
     }
@@ -57,14 +56,6 @@ public class Intake extends SubsystemBase {
     }
 
 
-    // public Command fullyIntakeUp() {
-    //     return startEnd(() -> {
-    //         do {
-    //             extenderMotor.setVoltage(1);
-    //         } while (extenderMotor.getPosition().getValueAsDouble() != (0.34106));
-    //     }, () -> extenderMotor.setVoltage(0));
-    // }
-
     public Command intakeFuel() {
         return startEnd(() -> scooperMotor.setVoltage(1), () -> scooperMotor.setVoltage(0));
     }
@@ -75,4 +66,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         System.out.println(extenderMotor.getPosition());
     }
+
+
 }
