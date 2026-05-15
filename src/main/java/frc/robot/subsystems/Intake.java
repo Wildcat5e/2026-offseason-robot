@@ -26,29 +26,39 @@ public class Intake extends SubsystemBase {
 
 
     public Command IntakeUp() {
-        return startEnd(() -> extenderMotor.setVoltage((1)), () -> extenderMotor.setVoltage(0));
+        return startEnd( // @formatter:off
+            () -> extenderMotor.setVoltage((1)),
+            () -> extenderMotor.setVoltage(0)); // @formatter:on
     }
 
     public Command IntakeDown() {
-        return startEnd(() -> extenderMotor.setVoltage((-1)), () -> extenderMotor.setVoltage(0));
+        return startEnd( // @formatter:off
+            () -> extenderMotor.setVoltage((-1)),
+            () -> extenderMotor.setVoltage(0));// @formatter:on
     }
 
     // get new data, intake pushed too far in
     public Command fullyIntakeUp() {
         final double tolerance = 0.03;
-        return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(1),
-            (interrupted) -> extenderMotor.setVoltage(0), () -> {
+        return new FunctionalCommand( // @formatter:off
+            () -> extenderMotor.setVoltage(0), 
+            () -> extenderMotor.setVoltage(1),
+            (interrupted) -> extenderMotor.setVoltage(0), 
+            () -> {
                 return (extenderMotor.getPosition().getValueAsDouble() >= -0.05 - tolerance);
-            }, this);
+            }, this); // @formatter:on
     }
 
     // get new data, data was when the chain was being bent
     public Command fullyIntakeDown() {
         final double tolerance = 0.01;
-        return new FunctionalCommand(() -> extenderMotor.setVoltage(0), () -> extenderMotor.setVoltage(-1),
-            (interrupted) -> extenderMotor.setVoltage(0), () -> {
+        return new FunctionalCommand( // @formatter:off
+            () -> extenderMotor.setVoltage(0), 
+            () -> extenderMotor.setVoltage(-1),
+            (interrupted) -> extenderMotor.setVoltage(0), 
+            () -> {
                 return (extenderMotor.getPosition().getValueAsDouble() <= -0.28076171875 + tolerance);
-            }, this);
+            }, this); // @formatter:on
     }
 
     public Command setExtenderPositionZero() {
@@ -57,7 +67,9 @@ public class Intake extends SubsystemBase {
 
 
     public Command intakeFuel() {
-        return startEnd(() -> scooperMotor.setVoltage(1), () -> scooperMotor.setVoltage(0));
+        return startEnd( // @formatter:off
+            () -> scooperMotor.setVoltage(1), 
+            () -> scooperMotor.setVoltage(0)); // @formatter:on
     }
 
     // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits

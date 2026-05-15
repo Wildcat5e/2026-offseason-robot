@@ -13,7 +13,9 @@ public class Flywheel extends SubsystemBase {
     public Flywheel() {}
 
     public Command spinFlywheel() {
-        return startEnd(() -> setFlywheelVoltage(0), () -> setFlywheelVoltage(0));
+        return startEnd(
+            () -> setFlywheelVoltage(0), 
+            () -> setFlywheelVoltage(0));
     }
 
     private void setFlywheelVoltage(double volts) {

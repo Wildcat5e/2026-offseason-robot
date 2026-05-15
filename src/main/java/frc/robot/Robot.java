@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Outtake;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -21,9 +20,8 @@ public class Robot extends TimedRobot {
     public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
     static final double DEADZONE = .15;
-    Outtake outtake = new Outtake();
     EventLoop shooting;
-    Intake intake = new Intake();
+    private final Intake intake = new Intake();
 
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -50,7 +48,7 @@ public class Robot extends TimedRobot {
         controller.leftTrigger().whileTrue(intake.IntakeDown());
         controller.rightBumper().onTrue(intake.fullyIntakeUp());
         controller.rightTrigger().onTrue(intake.fullyIntakeDown());
-        controller.y().whileTrue(intake.intakeFuel());
+        controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
     }
 
