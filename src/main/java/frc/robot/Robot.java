@@ -4,11 +4,16 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Outtake;
+import frc.robot.subsystems.RotateToHub;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -20,6 +25,7 @@ public class Robot extends TimedRobot {
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
     static final double DEADZONE = .15;
     Outtake outtake = new Outtake();
+    RotateToHub rotateToHub = new RotateToHub();
     EventLoop shooting;
 
 
@@ -27,22 +33,33 @@ public class Robot extends TimedRobot {
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
 
+    private final Field2d fieldWidget = new Field2d();
+
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
-    public Robot() {}
+    public Robot() {
+        controllerTesting();
+        buttonBinding();
+
+        SmartDashboard.putData("Field", fieldWidget);
+        // Ask Adi what this is about, its for PID/RotateToHub somehow
+    }
 
     public void controllerTesting() {
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
-            swerveRequest.withVelocityY(-controller.getLeftX() * MAX_LINEAR_SPEED);
-            swerveRequest.withVelocityX(-controller.getLeftY() * MAX_LINEAR_SPEED);
+            swerveRequest.withVelocityY(MathUtil.applyDeadband(-controller.getLeftX(), DEADZONE) * MAX_LINEAR_SPEED);
+            swerveRequest.withVelocityX(MathUtil.applyDeadband(-controller.getLeftY(), DEADZONE) * MAX_LINEAR_SPEED);
+            //add a deadzone to the two lines above this comment or just delete this comment if you merge with Tommy
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
+    }
 
+
+    public void buttonBinding() {
         controller.rightTrigger().whileTrue(outtake.shoot());
-
-        //spin outtake wheels
+        controller.a().whileTrue(rotateToHub.rotateToHub());
     }
 
     /**
@@ -54,7 +71,11 @@ public class Robot extends TimedRobot {
      * updating.
      */
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+
+        fieldWidget.setRobotPose(drivetrain.getState().Pose);
+    }
 
     /** This function is called once when auton is enabled. */
     @Override
