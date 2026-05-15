@@ -22,7 +22,7 @@ public class Flywheel extends SubsystemBase {
     }
     /*
      * My logic is to write a method to check if flywheel is up to speed, to do this, we need to first be able to get
-     * the robot's position on the field, then go to the interpolation data for the voltage that we need, and then start
+     * the robot's position on the field, then go to the interpolation data for the speed that we need, and then start
      * running the flywheel until isFlywheelUpToSpeed() returns true Uncomment the method below when you are ready to
      * write it, leaving it commented out so it compiles for now
      */
