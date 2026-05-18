@@ -25,20 +25,20 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public Command IntakeUp() {
+    public Command raiseIntake() {
         return startEnd( // @formatter:off
             () -> extenderMotor.setVoltage((1)),
             () -> extenderMotor.setVoltage(0)); // @formatter:on
     }
 
-    public Command IntakeDown() {
+    public Command lowerIntake() {
         return startEnd( // @formatter:off
             () -> extenderMotor.setVoltage((-1)),
             () -> extenderMotor.setVoltage(0));// @formatter:on
     }
 
     // get new data, intake pushed too far in
-    public Command fullyIntakeUp() {
+    public Command fullyRaiseIntake() {
         final double tolerance = 0.03;
         return new FunctionalCommand( // @formatter:off
             () -> extenderMotor.setVoltage(0), 
@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
     }
 
     // get new data, data was when the chain was being bent
-    public Command fullyIntakeDown() {
+    public Command fullyLowerIntake() {
         final double tolerance = 0.01;
         return new FunctionalCommand( // @formatter:off
             () -> extenderMotor.setVoltage(0), 
