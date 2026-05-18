@@ -75,9 +75,7 @@ public class Intake extends SubsystemBase {
     // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits
 
     @Override
-    public void periodic() {
-        System.out.println(extenderMotor.getPosition());
-    }
+    public void periodic() {}
 
 
 }
