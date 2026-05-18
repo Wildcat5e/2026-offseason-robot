@@ -50,6 +50,23 @@ public class Robot extends TimedRobot {
         controller.rightTrigger().onTrue(intake.fullyIntakeDown());
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
+        // what is the difference between intakeDown vs fullyIntakeDown and intakeUp vs fullyIntakeUp? 
+        // what does setExtenderPositionZero do?
+
+        //@formatter:off
+        //TODO: review controlls
+        /*
+         * Charlie's idea for controller bindings: 
+         * leftBumper: intakeDown 
+         * leftTrigger: intakeFuel 
+         * rightBumper: intakeUp
+         * rightTrigger: shootFuel 
+         * y: 
+         * x: 
+         * b:
+         * a: rotateToHub
+         */
+        //@formatter:on
     }
 
 
