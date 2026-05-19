@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.RotateToHub;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -22,7 +24,7 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     EventLoop shooting;
     private final Intake intake = new Intake();
-
+    private final Flywheel flywheel = new Flywheel();
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot {
         controller.x().onTrue(intake.setExtenderPositionZero());
         // what is the difference between intakeDown vs fullyIntakeDown and intakeUp vs fullyIntakeUp? 
         // what does setExtenderPositionZero do?
+        controller.a().whileTrue(new RotateToHub(drivetrain, flywheel));
 
         //@formatter:off
         //TODO: review controlls
@@ -64,7 +67,7 @@ public class Robot extends TimedRobot {
          * y: 
          * x: 
          * b:
-         * a: rotateToHub
+         * a: rotateToHubActive
          */
         //@formatter:on
     }
