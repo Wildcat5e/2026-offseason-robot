@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Intake;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
         controller.leftTrigger().whileTrue(intake.lowerIntake());
         controller.rightBumper().onTrue(intake.fullyRaiseIntake());
         controller.rightTrigger().onTrue(intake.fullyLowerIntake());
-        controller.y().toggleOnTrue(intake.intakeFuel());
+        controller.y().toggleOnTrue(intake.runScooper());
         controller.x().onTrue(intake.setExtenderPositionZero());
     }
 
