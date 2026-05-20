@@ -66,17 +66,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
     }
 
-    /**
-     * This function runs when the robot is first started up. Use it for set up tasks like connecting controllers
-     */
-    @Override
-    public void robotInit() {}
-
     /** This function is called once when auton is enabled. */
     @Override
-    public void autonomousInit() {
-
-    }
+    public void autonomousInit() {}
 
     /** This function is called periodically during autonomous. */
     @Override
@@ -88,9 +80,7 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {
-
-    }
+    public void teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
     @Override
