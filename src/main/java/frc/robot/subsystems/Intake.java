@@ -66,7 +66,7 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public Command intakeFuel() {
+    public Command runScooper() {
         return startEnd( // @formatter:off
             () -> scooperMotor.setVoltage(1), 
             () -> scooperMotor.setVoltage(0)); // @formatter:on
