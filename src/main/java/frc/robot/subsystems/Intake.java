@@ -41,8 +41,8 @@ public class Intake extends SubsystemBase {
     public Command fullyRaiseIntake() {
         final double tolerance = 0.03;
         return new FunctionalCommand( // @formatter:off
-            () -> extenderMotor.setVoltage(0), 
-            () -> extenderMotor.setVoltage(1),
+            () -> extenderMotor.setVoltage(1), 
+            () -> {},
             (interrupted) -> extenderMotor.setVoltage(0), 
             () -> {
                 return (extenderMotor.getPosition().getValueAsDouble() >= -0.05 - tolerance);
@@ -53,8 +53,8 @@ public class Intake extends SubsystemBase {
     public Command fullyLowerIntake() {
         final double tolerance = 0.01;
         return new FunctionalCommand( // @formatter:off
-            () -> extenderMotor.setVoltage(0), 
-            () -> extenderMotor.setVoltage(-1),
+            () -> extenderMotor.setVoltage(-1), 
+            () -> {},
             (interrupted) -> extenderMotor.setVoltage(0), 
             () -> {
                 return (extenderMotor.getPosition().getValueAsDouble() <= -0.28076171875 + tolerance);
