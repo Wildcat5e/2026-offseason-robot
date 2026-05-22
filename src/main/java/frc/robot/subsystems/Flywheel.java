@@ -27,6 +27,5 @@ public class Flywheel extends SubsystemBase {
      * write it, leaving it commented out so it compiles for now
      */
     //public boolean isFlywheelUpToSpeed() {}
-    
 
-    
+}
