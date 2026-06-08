@@ -28,7 +28,7 @@ public class RotateToHub extends Command {
     @Override
     public void execute() {
         robotPose = drivetrain.getState().Pose;
-        double neededAngle = CalcShortForCalculator.theta(drivetrain);
+        double neededAngle = CalcShortForCalculator.angleToHub(drivetrain);
         double headingError = neededAngle - robotPose.getRotation().getRadians();
         double rotationSpeed = PID_CONTROLLER.calculate(headingError);
         drivetrain.applyRequest(() -> swerveRequest.withRotationalRate(rotationSpeed));

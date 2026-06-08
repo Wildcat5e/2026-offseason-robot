@@ -27,7 +27,7 @@ public class CalcShortForCalculator {
     }
 
     //returns a feild angle
-    static double theta(CommandSwerveDrivetrain drivetrain) {
+    static double angleToHub(CommandSwerveDrivetrain drivetrain) {
         DriverStation.getAlliance().ifPresent(fms_alliance -> isBlueAlliance = fms_alliance == Alliance.Blue);
         Pose2d currentPose = drivetrain.getState().Pose;
 

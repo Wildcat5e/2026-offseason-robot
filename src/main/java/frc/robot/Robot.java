@@ -52,9 +52,9 @@ public class Robot extends TimedRobot {
         controller.rightTrigger().onTrue(intake.fullyIntakeDown());
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
-        // what is the difference between intakeDown vs fullyIntakeDown and intakeUp vs fullyIntakeUp? 
-        // what does setExtenderPositionZero do?
         controller.a().whileTrue(new RotateToHub(drivetrain, flywheel));
+        controller.b().whileTrue(flywheel.shootFuel());
+        // Temp assignment 
 
         //@formatter:off
         //TODO: review controlls
@@ -71,7 +71,6 @@ public class Robot extends TimedRobot {
          */
         //@formatter:on
     }
-
 
     /**
      * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics that you want ran

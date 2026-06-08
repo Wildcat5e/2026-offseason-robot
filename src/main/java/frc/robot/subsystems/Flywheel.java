@@ -34,8 +34,11 @@ public class Flywheel extends SubsystemBase {
         });
     }
 
-    public void setFlywheelVel(double targetFlywheelSpeed) {
-        //TODO: Replace this placeholder so that RotateToHub can actually shoot 
-    }
+    public void setRPM(double rpmRequest) {
+        double lrpm = leftFlywheelMotor.getVelocity().getValueAsDouble() * 60;
+        double rrpm = -rightFlywheelMotor.getVelocity().getValueAsDouble() * 60;
+        // Currently inverted to match the assumed state of the flywheels, this requires testing
 
+        // TODO: get the static friction and RPM at a given voltage
+    }
 }
