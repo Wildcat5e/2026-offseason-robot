@@ -31,8 +31,7 @@ public class RotateToHub extends Command {
         double neededAngle = CalcShortForCalculator.angleToHub(drivetrain);
         double headingError = neededAngle - robotPose.getRotation().getRadians();
         double rotationSpeed = PID_CONTROLLER.calculate(headingError);
-        drivetrain.applyRequest(() -> swerveRequest.withRotationalRate(rotationSpeed));
-
+        drivetrain.setControl(swerveRequest.withRotationalRate(rotationSpeed));
 
     }
 
