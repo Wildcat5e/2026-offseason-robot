@@ -5,11 +5,14 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PhotonVision;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -22,9 +25,10 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     EventLoop shooting;
     private final Intake intake = new Intake();
-
-
+    private final Field2d fieldWidget = new Field2d();
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    private final PhotonVision vision = new PhotonVision(drivetrain::addVisionMeasurement);
+
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
 
@@ -33,7 +37,7 @@ public class Robot extends TimedRobot {
      */
     public Robot() {
         controllerTesting();
-
+        SmartDashboard.putData("Field", fieldWidget);
     }
 
     public void controllerTesting() {
@@ -64,6 +68,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        fieldWidget.setRobotPose(drivetrain.getState().Pose);
     }
 
     /** This function is called once when auton is enabled. */
