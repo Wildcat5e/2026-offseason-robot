@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,8 +12,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Flywheel extends SubsystemBase {
     private final TalonFX leftFlywheelMotor = new TalonFX(21);
     private final TalonFX rightFlywheelMotor = new TalonFX(20);
+    private final VelocityVoltage motorVel = new VelocityVoltage(0);
 
-    double flywheelVoltage = 2;
+    double flywheelVoltage = .5;
     double kickerVoltage = 4;
     double conveyorVoltage = 8;
     // kickerVoltage and conveyorVoltage are stored in here and then passed into Hopper
@@ -22,7 +24,7 @@ public class Flywheel extends SubsystemBase {
     public Command shootFuel() {
         return startEnd(() -> {
             leftFlywheelMotor.setVoltage(flywheelVoltage);
-            rightFlywheelMotor.setVoltage(-flywheelVoltage);
+            rightFlywheelMotor.setVoltage(flywheelVoltage);
             // TODO: Check if the flywheel voltage needs to be inverted like this or not
             hopper.setKickerVoltage(kickerVoltage);
             hopper.setConveyorVoltage(conveyorVoltage);
@@ -35,10 +37,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void setRPM(double rpmRequest) {
-        double lrpm = leftFlywheelMotor.getVelocity().getValueAsDouble() * 60;
-        double rrpm = -rightFlywheelMotor.getVelocity().getValueAsDouble() * 60;
-        // Currently inverted to match the assumed state of the flywheels, this requires testing
-
-        // TODO: get the static friction and RPM at a given voltage
+        leftFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
+        rightFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
     }
 }
