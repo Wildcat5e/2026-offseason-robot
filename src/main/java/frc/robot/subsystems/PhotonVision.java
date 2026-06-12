@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -42,24 +44,24 @@ public class PhotonVision extends SubsystemBase {
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimator.estimateLowestAmbiguityPose(result);
             }
-            // updateEstimationStdDevs(visionEst, result.getTargets());
 
-            // if (Robot.isSimulation()) {
-            //     visionEst.ifPresentOrElse(
-            //         est -> 
-            //             getSimDebugField()
-            //             .getObject("VisionEstimation")
-            //             .setPose(est.estimatedPose.toPose2d()),
-            //             () -> {
-            //                 getSimDebugField().getObject("VisionEstimation").setPoses();
-            //             });
-
-            // }
 
             visionEst.ifPresent(est -> {
+                updateEstimationStdDevs(visionEst, result.getTargets());
                 var estStdDevs = SINGLE_TAG_STD_DEV;
                 estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
             });
+        }
+    }
+
+    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose,
+        List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            curStdDevs = SINGLE_TAG_STD_DEV;
+        } else {
+            for (PhotonTrackedTarget target : targets) {
+
+            }
         }
     }
 
