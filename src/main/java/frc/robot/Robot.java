@@ -25,7 +25,8 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     EventLoop shooting;
     private final Intake intake = new Intake();
-    private final Field2d fieldWidget = new Field2d();
+    private final Field2d robotFieldWidget = new Field2d();
+    private final Field2d cameraFieldWidget = new Field2d();
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final PhotonVision vision = new PhotonVision(drivetrain::addVisionMeasurement);
 
@@ -37,7 +38,8 @@ public class Robot extends TimedRobot {
      */
     public Robot() {
         controllerTesting();
-        SmartDashboard.putData("Field", fieldWidget);
+        SmartDashboard.putData("Robot Field", robotFieldWidget);
+        SmartDashboard.putData("Camera Field", cameraFieldWidget);
     }
 
     public void controllerTesting() {
@@ -68,7 +70,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        fieldWidget.setRobotPose(drivetrain.getState().Pose);
+        robotFieldWidget.setRobotPose(drivetrain.getState().Pose);
+        vision.visionEst.ifPresent(est -> cameraFieldWidget.setRobotPose(est.estimatedPose.toPose2d()));
     }
 
     /** This function is called once when auton is enabled. */
