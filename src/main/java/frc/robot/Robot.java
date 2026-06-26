@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
         controller.rightTrigger().onTrue(intake.fullyLowerIntake());
         controller.y().toggleOnTrue(intake.runScooper());
         controller.x().onTrue(intake.setExtenderPositionZero());
+        controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
     }
 
 

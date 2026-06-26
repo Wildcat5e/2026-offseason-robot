@@ -74,7 +74,7 @@ public class PhotonVision extends SubsystemBase {
                 continue;
             } else {
                 Translation2d robotPose = estimatedPose.get().estimatedPose.toPose2d().getTranslation();
-                totalDistance += robotPose.getDistance(tagPose.get().toPose2d().getTranslation());
+                totalDistance += robotPose.getDistance(tagPose.get().toPose2d().getTranslation()); // in meters
                 tagCount++;
             }
         }
