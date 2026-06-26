@@ -53,7 +53,6 @@ public class PhotonVision extends SubsystemBase {
 
             visionEst.ifPresent(est -> {
                 updateEstimationStdDevs(visionEst, result.getTargets());
-                System.out.println(curStdDevs);
                 estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, curStdDevs);
             });
         }

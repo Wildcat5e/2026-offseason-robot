@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.signals.DiffPIDRefSlopeECUTime_ClosedLoopModeValue;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,9 +26,9 @@ public class RotateToHub extends Command {
     /** Creates a new RotateToHub. */
     public RotateToHub(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
-        this.pidController = new PIDController(5, 0, 0); // placeholder values
-        this.pidController.enableContinuousInput(-180, 180);
-        this.pidController.setTolerance(.5);
+        this.pidController = new PIDController(3, 0, 0); // placeholder values
+        this.pidController.enableContinuousInput(-Math.PI, Math.PI); // look into this
+        this.pidController.setTolerance(.5); // what unit
         addRequirements(drivetrain);
     }
 
@@ -40,8 +41,12 @@ public class RotateToHub extends Command {
     public void execute() {
         Pose2d robotPose = drivetrain.getState().Pose;
         Rotation2d targetRotation = getTargetRotation(robotPose);
+        System.out.println("Robot Pose: " + robotPose);
         double rotationSpeed =
-            pidController.calculate(robotPose.getRotation().getDegrees(), targetRotation.getDegrees());
+            pidController.calculate(robotPose.getRotation().getRadians(), targetRotation.getRadians());
+        System.out.println("Current Rotation: " + robotPose.getRotation().getDegrees());
+        System.out.println("Target Rotation: " + targetRotation.getDegrees());
+        System.out.println("Rotation speed: " + rotationSpeed); // for debugging
         drivetrain.setControl(driveRequest.withRotationalRate(rotationSpeed));
     }
 
@@ -59,7 +64,7 @@ public class RotateToHub extends Command {
 
     private static Rotation2d getTargetRotation(Pose2d robotPose) {
         Translation2d robotTranslation = robotPose.getTranslation();
-        Translation2d hubTranslation = new Translation2d(8.25, 4.11); //placeholder hub coordinates
+        Translation2d hubTranslation = new Translation2d(4.634, 4.041); // hub coordinates from path planner
         Translation2d toHubVector = hubTranslation.minus(robotTranslation); // figure out exactly how this works
         Rotation2d targetRotation = toHubVector.getAngle();
         return targetRotation;

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.RotateToHub;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
         controller.y().toggleOnTrue(intake.runScooper());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller.b().whileTrue(new RotateToHub(drivetrain));
     }
 
 
