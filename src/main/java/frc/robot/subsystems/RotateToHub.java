@@ -33,6 +33,7 @@ public class RotateToHub extends Command {
         double rotationSpeed = PID_CONTROLLER.calculate(headingError);
         drivetrain.setControl(swerveRequest.withRotationalRate(rotationSpeed));
 
+        flywheel.setRPM(CalcShortForCalculator.getFlywheelVel(drivetrain));
     }
 
     @Override

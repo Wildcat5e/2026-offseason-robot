@@ -62,6 +62,11 @@ public class CalcShortForCalculator {
         return Math.sqrt(sq(deltaX) + sq(deltaY));
     }
 
+    static double getFlywheelVel(CommandSwerveDrivetrain drivetrain) {
+        double distanceToHub = distance(drivetrain);
+        return flywheelSpeeds.get(distanceToHub);
+    }
+
     static InterpolatingDoubleTreeMap flywheelSpeeds = InterpolatingDoubleTreeMap.ofEntries(
     // @formatter:off
         // Distance (M), Flywheel RPM
