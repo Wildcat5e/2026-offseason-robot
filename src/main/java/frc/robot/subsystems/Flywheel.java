@@ -16,6 +16,10 @@ public class Flywheel extends SubsystemBase {
         return startEnd(() -> setFlywheelVoltage(3), () -> setFlywheelVoltage(0));
     }
 
+    public void spinFlywheel(double volts) {
+        setFlywheelVoltage(volts);
+    }
+
     private void setFlywheelVoltage(double volts) {
         leftFlywheelMotor.setVoltage(volts);
         rightFlywheelMotor.setVoltage(volts);
