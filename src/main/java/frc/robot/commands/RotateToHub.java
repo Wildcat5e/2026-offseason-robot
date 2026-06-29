@@ -28,7 +28,7 @@ public class RotateToHub extends Command {
         this.drivetrain = drivetrain;
         this.pidController = new PIDController(3, 0, 0); // placeholder values
         this.pidController.enableContinuousInput(-Math.PI, Math.PI); // look into this
-        this.pidController.setTolerance(.5); // what unit
+        this.pidController.setTolerance(Math.toRadians(0.5)); // what unit
         addRequirements(drivetrain);
     }
 
