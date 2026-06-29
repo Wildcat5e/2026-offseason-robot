@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.RotateToHub;
+import frc.robot.commands.ShootFuel;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.PhotonVision;
+import frc.robot.subsystems.Hopper;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -29,7 +30,8 @@ public class Robot extends TimedRobot {
     private final Field2d robotFieldWidget = new Field2d();
     private final Field2d cameraFieldWidget = new Field2d();
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final PhotonVision vision = new PhotonVision(drivetrain::addVisionMeasurement);
+    Flywheel flywheel = new Flywheel();
+    Hopper hopper = new Hopper();
 
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
@@ -53,12 +55,10 @@ public class Robot extends TimedRobot {
 
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
-        controller.rightBumper().onTrue(intake.fullyRaiseIntake());
-        controller.rightTrigger().onTrue(intake.fullyLowerIntake());
+        controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper)); // shoots fuel, just need to make sure drivtrain doens't move, will work on that later
         controller.y().toggleOnTrue(intake.runScooper());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        controller.b().whileTrue(new RotateToHub(drivetrain));
     }
 
 
@@ -74,7 +74,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         robotFieldWidget.setRobotPose(drivetrain.getState().Pose);
-        vision.visionEst.ifPresent(est -> cameraFieldWidget.setRobotPose(est.estimatedPose.toPose2d()));
     }
 
     /** This function is called once when auton is enabled. */
