@@ -11,6 +11,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -24,7 +25,6 @@ public class Robot extends TimedRobot {
     EventLoop shooting;
     private final Intake intake = new Intake();
     private final Flywheel flywheel = new Flywheel();
-
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();

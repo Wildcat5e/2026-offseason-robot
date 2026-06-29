@@ -6,5 +6,11 @@ public class Hopper {
     private final TalonFX kickerMotor = new TalonFX(14);
     private final TalonFX conveyorMotor = new TalonFX(15);
 
-    public Hopper() {}
+    public void setKickerVoltage(double voltage) {
+        kickerMotor.setVoltage(voltage);
+    }
+
+    public void setConveyorVoltage(double voltage) {
+        conveyorMotor.setVoltage(voltage);
+    }
 }

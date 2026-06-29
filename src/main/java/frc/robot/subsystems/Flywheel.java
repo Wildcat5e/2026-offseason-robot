@@ -10,10 +10,25 @@ public class Flywheel extends SubsystemBase {
     private final TalonFX leftFlywheelMotor = new TalonFX(21);
     private final TalonFX rightFlywheelMotor = new TalonFX(20);
 
-    public Flywheel() {}
+    double kickerVoltage = 4;
+    double conveyorVoltage = 8;
+
+    private final Hopper hopper = new Hopper();
+
+    public Flywheel() {
+        System.out.println("Charlie wuz here");
+    }
 
     public Command spinFlywheel() {
-        return startEnd(() -> setFlywheelVoltage(3), () -> setFlywheelVoltage(0));
+        return startEnd(() -> {
+            setFlywheelVoltage(3);
+            hopper.setKickerVoltage(kickerVoltage);
+            hopper.setConveyorVoltage(conveyorVoltage);
+        }, () -> {
+            setFlywheelVoltage(0);
+            hopper.setKickerVoltage(0);
+            hopper.setConveyorVoltage(0);
+        });
     }
 
     private void setFlywheelVoltage(double volts) {
