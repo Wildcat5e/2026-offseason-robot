@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Flywheel;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in the TimedRobot
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     EventLoop shooting;
     private final Intake intake = new Intake();
+    private final Flywheel flywheel = new Flywheel();
 
 
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -36,20 +38,33 @@ public class Robot extends TimedRobot {
 
     }
 
+
     public void controllerTesting() {
+        /* @formatter:off
         drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
             swerveRequest.withVelocityY(MathUtil.applyDeadband(-controller.getLeftX(), DEADZONE) * MAX_LINEAR_SPEED);
             swerveRequest.withVelocityX(MathUtil.applyDeadband(-controller.getLeftY(), DEADZONE) * MAX_LINEAR_SPEED);
             return swerveRequest
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
+        @formatter:on */
 
-        controller.leftBumper().whileTrue(intake.raiseIntake());
-        controller.leftTrigger().whileTrue(intake.lowerIntake());
-        controller.rightBumper().onTrue(intake.fullyRaiseIntake());
-        controller.rightTrigger().onTrue(intake.fullyLowerIntake());
-        controller.y().toggleOnTrue(intake.runScooper());
-        controller.x().onTrue(intake.setExtenderPositionZero());
+
+        controller.leftTrigger().whileTrue(intake.runScooper());
+        controller.rightTrigger().whileTrue(flywheel.spinFlywheel());
+        controller.povUp().whileTrue(intake.raiseIntake());
+        controller.povDown().whileTrue(intake.lowerIntake());
+
+        /*
+        @formatter:off
+         controller.leftBumper().whileTrue(intake.raiseIntake());
+         controller.leftTrigger().whileTrue(intake.lowerIntake());
+         controller.rightBumper().onTrue(intake.fullyRaiseIntake());
+         controller.rightTrigger().onTrue(intake.fullyLowerIntake());
+         controller.y().toggleOnTrue(intake.runScooper()); 
+         controller.x().onTrue(intake.setExtenderPositionZero());
+         @formatter:on
+         */
     }
 
 
