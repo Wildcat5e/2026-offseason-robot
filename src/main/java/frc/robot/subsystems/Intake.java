@@ -72,6 +72,18 @@ public class Intake extends SubsystemBase {
             () -> scooperMotor.setVoltage(0)); // @formatter:on
     }
 
+    public Command intakeFuel() {
+        return startEnd( //@formatter:off
+            () -> setScooperAndPusherVoltages(5),
+            () -> setScooperAndPusherVoltages(0)
+        ); // @formatter:on
+    }
+
+    private void setScooperAndPusherVoltages(double volts) {
+        scooperMotor.setVoltage(volts);
+        pusherMotor.setVoltage(volts);
+    }
+
     // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits
 
     @Override

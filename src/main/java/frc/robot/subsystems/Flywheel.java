@@ -10,8 +10,8 @@ public class Flywheel extends SubsystemBase {
     private final TalonFX leftFlywheelMotor = new TalonFX(21);
     private final TalonFX rightFlywheelMotor = new TalonFX(20);
 
-    double kickerVoltage = 4;
-    double conveyorVoltage = 8;
+    double kickerVoltage = -4;
+    double conveyorVoltage = -8;
 
     private final Hopper hopper = new Hopper();
 

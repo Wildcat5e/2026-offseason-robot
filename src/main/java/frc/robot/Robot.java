@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
         @formatter:on */
 
 
-        controller.leftTrigger().whileTrue(intake.runScooper());
+        controller.leftTrigger().whileTrue(intake.intakeFuel());
         controller.rightTrigger().whileTrue(flywheel.spinFlywheel());
         controller.povUp().whileTrue(intake.raiseIntake());
         controller.povDown().whileTrue(intake.lowerIntake());
