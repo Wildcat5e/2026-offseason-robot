@@ -82,7 +82,7 @@ public class PhotonVision extends SubsystemBase {
             return;
         }
         double averageDistance = totalDistance / tagCount;
-        double multiplier = 1 + (Math.pow(averageDistance, 2) / 30.0); // 30 is a placeholder factor for now
+        double multiplier = 1 + (Math.pow(averageDistance, 2) / 30.0); // can adjust mathematical formula to favore close distances
         if (tagCount == 1) {
             curStdDevs = SINGLE_TAG_STD_DEV;
             curStdDevs = curStdDevs.times(multiplier);
@@ -90,6 +90,10 @@ public class PhotonVision extends SubsystemBase {
             curStdDevs = MULTI_TAG_STD_DEV;
             curStdDevs = curStdDevs.times(multiplier);
         }
+        if (averageDistance < 1.5) {
+            curStdDevs = curStdDevs.times(0.5); // adjust std devs to be lower for closer distance
+        }
+        // record computer screen on elastic, test it out later
 
     }
 
