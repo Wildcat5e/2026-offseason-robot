@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller.b().whileTrue(intake.runPusher());
     }
 
 

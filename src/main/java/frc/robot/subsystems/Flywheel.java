@@ -21,6 +21,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     private void setFlywheelVoltage(double volts) {
+        System.out.println("Left flywheel voltage: " + leftFlywheelMotor.getMotorVoltage().getValueAsDouble());
+        System.out.println("Right flywheel voltage: " + rightFlywheelMotor.getMotorVoltage().getValueAsDouble());
         leftFlywheelMotor.setVoltage(volts);
         rightFlywheelMotor.setVoltage(volts);
     }

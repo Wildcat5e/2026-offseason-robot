@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase {
     
     public Command intakeFuel() {
         return startEnd( //@formatter:off
-            () -> setScooperAndPusherVoltages(3),
+            () -> setScooperAndPusherVoltages(4),
             () -> setScooperAndPusherVoltages(0)
         ); // @formatter:on
     }
@@ -90,6 +90,7 @@ public class Intake extends SubsystemBase {
     private void setScooperAndPusherVoltages(double volts) {
         scooperMotor.setVoltage(volts);
         pusherMotor.setVoltage(volts);
+        System.out.println("Pusher motor voltage: " + pusherMotor.getMotorVoltage().getValueAsDouble());
     }
 
 
