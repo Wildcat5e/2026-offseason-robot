@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
 
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
-        controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper)); // shoots fuel, just need to make sure drivtrain doens't move, will work on that later
+        controller.rightTrigger().whileTrue(new ShootFuel(drivetrain, flywheel, hopper)); // shoots fuel, just need to make sure drivtrain doens't move, will work on that later
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -108,11 +108,4 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {}
 
-    /** This function is called once when the robot is first started up. */
-    @Override
-    public void simulationInit() {}
-
-    /** This function is called periodically whilst in simulation. */
-    @Override
-    public void simulationPeriodic() {}
 }
