@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
         controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper)); // shoots fuel, just need to make sure drivtrain doens't move, will work on that later
-        controller.y().toggleOnTrue(intake.runScooper());
+        controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
     }

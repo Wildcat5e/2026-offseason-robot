@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase {
     
     public Command intakeFuel() {
         return startEnd( //@formatter:off
-            () -> setScooperAndPusherVoltages(5),
+            () -> setScooperAndPusherVoltages(3),
             () -> setScooperAndPusherVoltages(0)
         ); // @formatter:on
     }
