@@ -27,8 +27,8 @@ public class RotateToHub extends Command {
     public RotateToHub(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
         this.pidController = new PIDController(3, 0, 0); // placeholder values
-        this.pidController.enableContinuousInput(-Math.PI, Math.PI); // look into this
-        this.pidController.setTolerance(Math.toRadians(0.5)); // what unit
+        this.pidController.enableContinuousInput(-Math.PI, Math.PI);
+        this.pidController.setTolerance(Math.toRadians(0.5));
         addRequirements(drivetrain);
     }
 
@@ -65,7 +65,7 @@ public class RotateToHub extends Command {
     private static Rotation2d getTargetRotation(Pose2d robotPose) {
         Translation2d robotTranslation = robotPose.getTranslation();
         Translation2d hubTranslation = new Translation2d(4.634, 4.041); // hub coordinates from path planner
-        Translation2d toHubVector = hubTranslation.minus(robotTranslation); // figure out exactly how this works
+        Translation2d toHubVector = hubTranslation.minus(robotTranslation);
         Rotation2d targetRotation = toHubVector.getAngle();
         return targetRotation;
     }
