@@ -1,12 +1,15 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
+import java.util.Optional;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPLTVController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -44,6 +47,7 @@ public class Robot extends TimedRobot {
      */
     public Robot() {
         controllerTesting();
+        drivetrain.configureAutoBuilder();
         SmartDashboard.putData("Robot Field", robotFieldWidget);
         SmartDashboard.putData("Camera Field", cameraFieldWidget);
 
@@ -115,43 +119,4 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {}
 
-    /** This function is called once when the robot is first started up. */
-    @Override
-    public void simulationInit() {}
-
-    /** This function is called periodically whilst in simulation. */
-    @Override
-    public void simulationPeriodic() {}
-
-    public void configureAutoBuilder() {
-        // Load the RobotConfig from the GUI settings. You should probably
-        // store this in your Constants file
-        RobotConfig config;
-        try {
-            config = RobotConfig.fromGUISettings();
-        } catch (Exception e) {
-            // Handle exception as needed
-            e.printStackTrace();
-        }
-
-        // Configure AutoBuilder last
-        AutoBuilder.configure(drivetrain::getPose, // Robot pose supplier
-            drivetrain::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            drivetrain::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-            new PPLTVController(0.02), // PPLTVController is the built in path following controller for differential drive trains
-            config, // The robot configuration
-            () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            }, this // Reference to this subsystem to set requirements
-        );
-    }
 }

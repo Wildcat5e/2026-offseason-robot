@@ -10,7 +10,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.Constants.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -62,9 +65,24 @@ public class RotateToHub extends Command {
         return false;
     }
 
+    public static Translation2d getHubCoordinates() {
+        if (Constants.alliance.isPresent()) {
+            if (Constants.alliance.get() == DriverStation.Alliance.Red) { // return red alliance coordinates
+                return new Translation2d(11.921, 4.024);
+            } else {
+                return new Translation2d(4.624, 4.024);
+            }
+        } else {
+            return null;
+        }
+    }
+
     private static Rotation2d getTargetRotation(Pose2d robotPose) {
         Translation2d robotTranslation = robotPose.getTranslation();
-        Translation2d hubTranslation = new Translation2d(4.634, 4.041); // hub coordinates from path planner
+        Translation2d hubTranslation = getHubCoordinates();
+        if (hubTranslation == null) {
+            hubTranslation = new Translation2d(4.624, 4.024); // use blue alliance if null
+        }
         Translation2d toHubVector = hubTranslation.minus(robotTranslation);
         Rotation2d targetRotation = toHubVector.getAngle();
         return targetRotation;

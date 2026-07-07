@@ -91,7 +91,7 @@ public class PhotonVision extends SubsystemBase {
             curStdDevs = curStdDevs.times(multiplier);
         }
         if (averageDistance < 1.5) {
-            curStdDevs = curStdDevs.times(0.5); // adjust std devs to be lower for closer distance
+            curStdDevs = curStdDevs.times(0.3); // adjust std devs to be lower for closer distance
         }
         // record computer screen on elastic, test it out later
 
