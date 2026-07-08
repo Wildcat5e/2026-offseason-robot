@@ -6,6 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -46,30 +47,14 @@ public class Robot extends TimedRobot {
                 .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
         }));
 
-        controller.leftBumper().whileTrue(intake.IntakeUp());
-        controller.leftTrigger().whileTrue(intake.IntakeDown());
-        controller.rightBumper().onTrue(intake.fullyIntakeUp());
-        controller.rightTrigger().onTrue(intake.fullyIntakeDown());
-        controller.y().toggleOnTrue(intake.intakeFuel());
-        controller.x().onTrue(intake.setExtenderPositionZero());
+        controller.povUp().whileTrue(intake.IntakeUp());
+        controller.povDown().whileTrue(intake.IntakeDown());
+        controller.leftTrigger().whileTrue(intake.intakeFuel());
         controller.a().whileTrue(new RotateToHub(drivetrain, flywheel));
-        controller.b().whileTrue(flywheel.shootFuel());
-        // Temp assignment 
-
-        //@formatter:off
-        //TODO: review controlls
-        /*
-         * Charlie's idea for controller bindings: 
-         * leftBumper: intakeDown 
-         * leftTrigger: intakeFuel 
-         * rightBumper: intakeUp
-         * rightTrigger: shootFuel 
-         * y: 
-         * x: 
-         * b:
-         * a: rotateToHubActive
-         */
-        //@formatter:on
+        // RotateToHub also shoots the fuel, hold down rightTrigger to manually shoot fuel.
+        controller.rightTrigger().whileTrue(flywheel.shootFuel());
+        controller.leftBumper().onTrue(new InstantCommand(() -> Flywheel.decreaseMultiplier()));
+        controller.rightBumper().onTrue(new InstantCommand(() -> Flywheel.increaseMultiplier()));
     }
 
     /**

@@ -17,8 +17,6 @@ public class CalcShortForCalculator {
     static boolean isBlueAlliance;
     static Translation2d targetHubPosition;
     static double HOOD_ANGLE_RADIANS = Math.toRadians(64);
-    static double flywheelMultiplyer = 0;
-    //TODO: find the correct flywheelMultiplyer
 
     static Translation2d getTargetHubPosition() {
         DriverStation.getAlliance().ifPresent(fms_alliance -> isBlueAlliance = fms_alliance == Alliance.Blue);

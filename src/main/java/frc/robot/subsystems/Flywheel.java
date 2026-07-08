@@ -13,15 +13,16 @@ public class Flywheel extends SubsystemBase {
     double flywheelVoltage = .5;
     double kickerVoltage = -4;
     double conveyorVoltage = -8;
+    static double flywheelMultiplier = 1;
+
     // kickerVoltage and conveyorVoltage are stored in here and then passed into Hopper
 
     Hopper hopper = new Hopper();
 
     public Command shootFuel() {
         return startEnd(() -> {
-            leftFlywheelMotor.setVoltage(flywheelVoltage);
-            rightFlywheelMotor.setVoltage(flywheelVoltage);
-            // TODO: Check if the flywheel voltage needs to be inverted like this or not
+            leftFlywheelMotor.setVoltage(flywheelVoltage * flywheelMultiplier);
+            rightFlywheelMotor.setVoltage(flywheelVoltage * flywheelMultiplier);
             hopper.setKickerVoltage(kickerVoltage);
             hopper.setConveyorVoltage(conveyorVoltage);
         }, () -> {
@@ -32,8 +33,18 @@ public class Flywheel extends SubsystemBase {
         });
     }
 
+    public static void increaseMultiplier() {
+        flywheelMultiplier = flywheelMultiplier + .1;
+    }
+
+    public static void decreaseMultiplier() {
+        flywheelMultiplier = flywheelMultiplier - .1;
+    }
+
     public void setRPM(double rpmRequest) {
+        rpmRequest = rpmRequest * flywheelMultiplier;
         leftFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
         rightFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
     }
+    //TODO test if this actually spins flywheel if you give it some fake rpmRequest number
 }
