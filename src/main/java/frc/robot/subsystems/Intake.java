@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -68,8 +67,10 @@ public class Intake extends SubsystemBase {
 
     public Command intakeFuel() {
         return startEnd( // @formatter:off
-            () -> scooperMotor.setVoltage(1), 
-            () -> scooperMotor.setVoltage(0)); // @formatter:on
+            () -> {scooperMotor.setVoltage(5); 
+                pusherMotor.setVoltage(5);}, 
+            () -> {scooperMotor.setVoltage(0);
+                pusherMotor.setVoltage(0);}); // @formatter:on
     }
 
     // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits

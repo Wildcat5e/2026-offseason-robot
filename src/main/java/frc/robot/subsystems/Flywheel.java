@@ -1,13 +1,9 @@
 package frc.robot.subsystems;
 
-import java.util.Map;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Flywheel extends SubsystemBase {
     private final TalonFX leftFlywheelMotor = new TalonFX(21);
@@ -15,8 +11,8 @@ public class Flywheel extends SubsystemBase {
     private final VelocityVoltage motorVel = new VelocityVoltage(0);
 
     double flywheelVoltage = .5;
-    double kickerVoltage = 4;
-    double conveyorVoltage = 8;
+    double kickerVoltage = -4;
+    double conveyorVoltage = -8;
     // kickerVoltage and conveyorVoltage are stored in here and then passed into Hopper
 
     Hopper hopper = new Hopper();
