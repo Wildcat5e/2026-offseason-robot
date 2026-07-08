@@ -4,16 +4,21 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Optional;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPLTVController;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.RotateToHub;
@@ -38,6 +43,8 @@ public class Robot extends TimedRobot {
     private final Field2d cameraFieldWidget = new Field2d();
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final PhotonVision vision = new PhotonVision(drivetrain::addVisionMeasurement);
+    private final Command auto;
+    private final SendableChooser<Command> autoChooser;
 
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
@@ -46,8 +53,12 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {
-        controllerTesting();
         drivetrain.configureAutoBuilder();
+        addCommands();
+        controllerTesting();
+        auto = getAuto1();
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         SmartDashboard.putData("Robot Field", robotFieldWidget);
         SmartDashboard.putData("Camera Field", cameraFieldWidget);
 
@@ -89,7 +100,12 @@ public class Robot extends TimedRobot {
 
     /** This function is called once when auton is enabled. */
     @Override
-    public void autonomousInit() {}
+    public void autonomousInit() {
+        Command selected = autoChooser.getSelected();
+        if (selected != null) {
+            CommandScheduler.getInstance().schedule(selected);
+        }
+    }
 
     /** This function is called periodically during autonomous. */
     @Override
@@ -118,5 +134,13 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {}
+
+    public Command getAuto1() {
+        return new PathPlannerAuto("Auto 1");
+    }
+
+    public void addCommands() {
+        NamedCommands.registerCommand("IntakeFuel", intake.intakeFuel());
+    }
 
 }

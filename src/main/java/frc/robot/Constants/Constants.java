@@ -11,4 +11,8 @@ public final class Constants {
     public static final Optional<Alliance> alliance = DriverStation.getAlliance();;
     public static final Translation2d RED_HUB_COORDINATES = new Translation2d(11.921, 4.024);
     public static final Translation2d BLUE_HUB_COORDINATES = new Translation2d(4.624, 4.024);
+
+    /*
+     * Include field layout eventually and other constant values?
+     */
 }
