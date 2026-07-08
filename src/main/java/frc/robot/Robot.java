@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final PhotonVision vision = new PhotonVision(drivetrain::addVisionMeasurement);
     private final Command auto;
-    private final SendableChooser<Command> autoChooser;
+    //private final SendableChooser<Command> autoChooser;
 
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     CommandXboxController controller = new CommandXboxController(0);
@@ -53,12 +53,12 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any initialization code.
      */
     public Robot() {
-        drivetrain.configureAutoBuilder();
         addCommands();
+        drivetrain.configureAutoBuilder();
         controllerTesting();
         auto = getAuto1();
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        //autoChooser = AutoBuilder.buildAutoChooser();
+        //SmartDashboard.putData("Auto Chooser", autoChooser);
         SmartDashboard.putData("Robot Field", robotFieldWidget);
         SmartDashboard.putData("Camera Field", cameraFieldWidget);
 
@@ -101,9 +101,12 @@ public class Robot extends TimedRobot {
     /** This function is called once when auton is enabled. */
     @Override
     public void autonomousInit() {
-        Command selected = autoChooser.getSelected();
-        if (selected != null) {
-            CommandScheduler.getInstance().schedule(selected);
+        // Command selected = autoChooser.getSelected();
+        // if (selected != null) {
+        //     CommandScheduler.getInstance().schedule(selected);
+        // }
+        if (auto != null) {
+            CommandScheduler.getInstance().schedule(auto);
         }
     }
 
