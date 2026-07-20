@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.Juggle;
 import frc.robot.commands.ShootFuel;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -46,15 +47,10 @@ public class Robot extends TimedRobot {
     }
 
     public void controllerTesting() {
-        drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> {
-            swerveRequest.withVelocityY(MathUtil.applyDeadband(-controller.getLeftX(), DEADZONE) * MAX_LINEAR_SPEED);
-            swerveRequest.withVelocityX(MathUtil.applyDeadband(-controller.getLeftY(), DEADZONE) * MAX_LINEAR_SPEED);
-            return swerveRequest
-                .withRotationalRate(MathUtil.applyDeadband(-controller.getRightX(), DEADZONE) * MAX_ANGULAR_SPEED);
-        }));
 
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
+        controller.rightBumper().whileTrue(new Juggle(drivetrain, flywheel, hopper));
         controller.rightTrigger().whileTrue(new ShootFuel(drivetrain, flywheel, hopper)); // shoots fuel, just need to make sure drivtrain doens't move, will work on that later
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
