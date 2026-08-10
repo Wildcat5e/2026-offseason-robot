@@ -22,8 +22,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.RotateToHub;
+import frc.robot.commands.ShootFuel;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PhotonVision;
 
@@ -39,6 +42,8 @@ public class Robot extends TimedRobot {
     static final double DEADZONE = .15;
     EventLoop shooting;
     private final Intake intake = new Intake();
+    private final Flywheel flywheel = new Flywheel();
+    private final Hopper hopper = new Hopper();
     private final Field2d robotFieldWidget = new Field2d();
     private final Field2d cameraFieldWidget = new Field2d();
     CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -73,8 +78,8 @@ public class Robot extends TimedRobot {
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
         controller.rightBumper().onTrue(intake.fullyRaiseIntake());
-        controller.rightTrigger().onTrue(intake.fullyLowerIntake());
-        controller.y().toggleOnTrue(intake.runScooper());
+        controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper));
+        controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller.b().whileTrue(new RotateToHub(drivetrain));
