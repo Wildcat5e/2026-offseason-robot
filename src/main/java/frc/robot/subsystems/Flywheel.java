@@ -20,6 +20,8 @@ public class Flywheel extends SubsystemBase {
     Hopper hopper = new Hopper();
 
     public Command shootFuel() {
+        //TODO: Make it so the flywheel only shoots once up to speed (optional because in comp we will just use rotate to hub)
+        // Preferably this method would stop using voltage and just use something like setRPM
         return startEnd(() -> {
             leftFlywheelMotor.setVoltage(flywheelVoltage * flywheelMultiplier);
             rightFlywheelMotor.setVoltage(flywheelVoltage * flywheelMultiplier);
@@ -46,5 +48,4 @@ public class Flywheel extends SubsystemBase {
         leftFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
         rightFlywheelMotor.setControl(motorVel.withVelocity(rpmRequest / 60));
     }
-    //TODO test if this actually spins flywheel if you give it some fake rpmRequest number
 }

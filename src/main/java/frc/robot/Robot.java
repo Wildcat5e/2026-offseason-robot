@@ -55,6 +55,11 @@ public class Robot extends TimedRobot {
         controller.rightTrigger().whileTrue(flywheel.shootFuel());
         controller.leftBumper().onTrue(new InstantCommand(() -> Flywheel.decreaseMultiplier()));
         controller.rightBumper().onTrue(new InstantCommand(() -> Flywheel.increaseMultiplier()));
+        /*
+         * TODO: Nicholas suggests that the left and right bumper should be used to raise and lower intake (with
+         * assignments opposite to that in the Rebuilt 2026 Robot). The increase and decrease multiplier should instead
+         * be assigned to the current keys that the raise and lower intake are set.
+         */
     }
 
     /**

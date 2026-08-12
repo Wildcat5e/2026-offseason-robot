@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 public class RotateToHub extends Command {
     final PIDController PID_CONTROLLER = new PIDController(5.0, 0, 0);
+    //TODO: Tune kp (should be lower)
     private Pose2d robotPose;
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
     private final CommandSwerveDrivetrain drivetrain;
@@ -34,6 +35,7 @@ public class RotateToHub extends Command {
         drivetrain.setControl(swerveRequest.withRotationalRate(rotationSpeed));
 
         flywheel.setRPM(CalcShortForCalculator.getFlywheelVel(drivetrain));
+        // TODO: Why doesnt the above line run? During testing, the flywheel never spun (perhaps due to the PID overshoot)
     }
 
     @Override
