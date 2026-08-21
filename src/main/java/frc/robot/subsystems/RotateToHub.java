@@ -7,7 +7,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 
 public class RotateToHub extends Command {
-    final PIDController PID_CONTROLLER = new PIDController(5.0, 0, 0);
+    final PIDController PID_CONTROLLER = new PIDController(1.0, 0.2, 1.0);
     //TODO: Tune kp (should be lower)
     private Pose2d robotPose;
     SwerveRequest.FieldCentric swerveRequest = new SwerveRequest.FieldCentric();
