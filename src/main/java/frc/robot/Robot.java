@@ -22,7 +22,7 @@ import frc.robot.subsystems.RotateToHub;
 public class Robot extends TimedRobot {
     public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
-    static final double DEADZONE = .15;
+    static final double DEADZONE = .1;
     EventLoop shooting;
     private final Intake intake = new Intake();
     private final Flywheel flywheel = new Flywheel();
