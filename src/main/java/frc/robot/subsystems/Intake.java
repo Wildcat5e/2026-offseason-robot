@@ -5,86 +5,55 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 public class Intake extends SubsystemBase {
-    /** Creates a new Intake. */
-
     private final TalonFX pusherMotor = new TalonFX(16);
     private final TalonFX scooperMotor = new TalonFX(18);
     private final TalonFX extenderMotor = new TalonFX(17);
 
-
     public Intake() {
         extenderMotor.setPosition(0);
-
     }
 
-
     public Command raiseIntake() {
-        return startEnd( // @formatter:off
-            () -> extenderMotor.setVoltage((1)),
-            () -> extenderMotor.setVoltage(0)); // @formatter:on
+        return startEnd(() -> extenderMotor.setVoltage(1), () -> extenderMotor.setVoltage(0));
     }
 
     public Command lowerIntake() {
-        return startEnd( // @formatter:off
-            () -> extenderMotor.setVoltage((-1)),
-            () -> extenderMotor.setVoltage(0));// @formatter:on
+        return startEnd(() -> extenderMotor.setVoltage(-1), () -> extenderMotor.setVoltage(0));
     }
 
-    // get new data, intake pushed too far in
     public Command fullyRaiseIntake() {
         final double tolerance = 0.03;
-        return new FunctionalCommand( // @formatter:off
-            () -> extenderMotor.setVoltage(1), 
-            () -> {},
-            (interrupted) -> extenderMotor.setVoltage(0), 
-            () -> {
-                return (extenderMotor.getPosition().getValueAsDouble() >= -0.05 - tolerance);
-            }, this); // @formatter:on
+        return new FunctionalCommand(() -> extenderMotor.setVoltage(1), () -> {},
+            interrupted -> extenderMotor.setVoltage(0),
+            () -> extenderMotor.getPosition().getValueAsDouble() <= -0.05 - tolerance, this);
     }
 
-    // get new data, data was when the chain was being bent
     public Command fullyLowerIntake() {
         final double tolerance = 0.01;
-        return new FunctionalCommand( // @formatter:off
-            () -> extenderMotor.setVoltage(-1), 
-            () -> {},
-            (interrupted) -> extenderMotor.setVoltage(0), 
-            () -> {
-                return (extenderMotor.getPosition().getValueAsDouble() <= -0.28076171875 + tolerance);
-            }, this); // @formatter:on
+        return new FunctionalCommand(() -> extenderMotor.setVoltage(-1), () -> {},
+            interrupted -> extenderMotor.setVoltage(0),
+            () -> extenderMotor.getPosition().getValueAsDouble() <= -0.28076171875 + tolerance, this);
     }
 
     public Command setExtenderPositionZero() {
         return runOnce(() -> extenderMotor.setPosition(0));
     }
 
-
     public Command runScooper() {
-        return startEnd( // @formatter:off
-            () -> scooperMotor.setVoltage(2), 
-            () -> scooperMotor.setVoltage(0)); // @formatter:on
+        return startEnd(() -> scooperMotor.setVoltage(2), () -> scooperMotor.setVoltage(0));
     }
 
     public Command runPusher() {
-        return startEnd( // @formatter:off
-            () -> pusherMotor.setVoltage(2),
-            () -> pusherMotor.setVoltage(0)
-        ); // @formatter: on
+        return startEnd(() -> pusherMotor.setVoltage(2), () -> pusherMotor.setVoltage(0));
     }
 
-    
     public Command intakeFuel() {
-        return startEnd( //@formatter:off
-            () -> setScooperAndPusherVoltages(5),
-            () -> setScooperAndPusherVoltages(0)
-        ); // @formatter:on
+        return startEnd(() -> setScooperAndPusherVoltages(5), () -> {});
     }
 
     private void setScooperAndPusherVoltages(double volts) {
@@ -92,11 +61,6 @@ public class Intake extends SubsystemBase {
         pusherMotor.setVoltage(volts);
     }
 
-
-    // build method to detect intake jam later, and knowing when to stop the intake, beam break, motor current limits
-
     @Override
     public void periodic() {}
-
-
 }

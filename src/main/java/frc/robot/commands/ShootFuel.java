@@ -3,32 +3,25 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
-
 
 public class ShootFuel extends Command {
-
-    Flywheel flywheel;
-    Hopper hopper;
-
+    private final Flywheel flywheel;
+    private final Hopper hopper;
 
     public ShootFuel(Flywheel flywheel, Hopper hopper) {
         this.flywheel = flywheel;
         this.hopper = hopper;
-        addRequirements(flywheel, hopper);
+        addRequirements(flywheel);
     }
 
     @Override
     public void initialize() {
-        flywheel.spinFlywheel(3);
-        hopper.setHopperVoltages(-8, -3);
+        flywheel.spinFlywheel(5);
+        hopper.setHopperVoltage(-8, -3);
     }
 
     @Override
-    public void execute() {
-
-
-    }
+    public void execute() {}
 
     @Override
     public void end(boolean interrupted) {
