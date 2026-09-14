@@ -39,8 +39,9 @@ public class RotateToHub extends Command {
     @Override
     public void execute() {
         Pose2d robotPose = drivetrain.getState().Pose;
+        measuredHeading = robotPose.getRotation().getRadians();
         Rotation2d targetRotation = getTargetRotation(robotPose);
-        double rotationSpeed = pidController.calculate(measuredHeading, targetRotation.getDegrees());
+        double rotationSpeed = pidController.calculate(measuredHeading, targetRotation.getRadians());
         rotationSpeed = MathUtil.clamp(rotationSpeed, -MAX_ROTATION_RATE, MAX_ROTATION_RATE);
 
         drivetrain.setControl(driveRequest.withVelocityX(0).withVelocityY(0).withRotationalRate(rotationSpeed));

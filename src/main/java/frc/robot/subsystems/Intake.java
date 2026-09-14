@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
         final double tolerance = 0.03;
         return new FunctionalCommand(() -> extenderMotor.setVoltage(1), () -> {},
             interrupted -> extenderMotor.setVoltage(0),
-            () -> extenderMotor.getPosition().getValueAsDouble() <= -0.05 - tolerance, this);
+            () -> extenderMotor.getPosition().getValueAsDouble() >= -0.05 - tolerance, this);
     }
 
     public Command fullyLowerIntake() {
@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command intakeFuel() {
-        return startEnd(() -> setScooperAndPusherVoltages(5), () -> {});
+        return startEnd(() -> setScooperAndPusherVoltages(5), () -> setScooperAndPusherVoltages(0));
     }
 
     private void setScooperAndPusherVoltages(double volts) {

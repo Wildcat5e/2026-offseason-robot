@@ -11,13 +11,13 @@ public class ShootFuel extends Command {
     public ShootFuel(Flywheel flywheel, Hopper hopper) {
         this.flywheel = flywheel;
         this.hopper = hopper;
-        addRequirements(flywheel);
+        addRequirements(flywheel, hopper);
     }
 
     @Override
     public void initialize() {
         flywheel.spinFlywheel(5);
-        hopper.setHopperVoltage(-8, -3);
+        hopper.setHopperVoltages(-8, -3);
     }
 
     @Override

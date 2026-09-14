@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Flywheel extends SubsystemBase {
     private final TalonFX leftFlywheelMotor = new TalonFX(21);
-    private final TalonFX rightFlywheelMotor = new TalonFX(21);
+    private final TalonFX rightFlywheelMotor = new TalonFX(20);
 
     public Flywheel() {}
 
