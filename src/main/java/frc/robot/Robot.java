@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.leftTrigger().whileTrue(intake.lowerIntake());
         controller.rightBumper().onTrue(intake.fullyRaiseIntake());
-        controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper));
+        controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper, drivetrain));
         controller.y().toggleOnTrue(intake.intakeFuel());
         controller.x().onTrue(intake.setExtenderPositionZero());
         controller.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));

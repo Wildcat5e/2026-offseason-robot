@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -18,6 +18,12 @@ public class Flywheel extends SubsystemBase {
 
     public void spinFlywheel(double volts) {
         setFlywheelVoltage(volts);
+    }
+
+    public void spinFlywheelRPM(double rpm) {
+        leftFlywheelMotor.setControl(new VelocityVoltage(rpm / 60.0));
+        rightFlywheelMotor.setControl(new VelocityVoltage(rpm / 60.0));
+
     }
 
     private void setFlywheelVoltage(double volts) {
