@@ -15,13 +15,19 @@ public class ShootFuel extends Command {
     Flywheel flywheel;
     Hopper hopper;
     CommandSwerveDrivetrain drivetrain;
-    Translation2d hub = Constants.BLUE_HUB_COORDINATES;
-    Optional<Alliance> alliance==DriverStation.getAlliance();
+    Translation2d hub;
 
-    if(alliance.isPresent()){
-        if (alliance.get() == Alliance.Red){ hub = Constants.RED_HUB_COORDINATES}
-        else if (alliance.get() == Alliance.Blue) {hub  Constants.BLUE_HUB_COORDINATES}
-        else System.out.println("No hub Found");
+    public void setHub() {
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+
+        if (alliance.isPresent()) {
+            if (alliance.get() == Alliance.Red) {
+                hub = Constants.RED_HUB_COORDINATES;
+
+            } else if (alliance.get() == Alliance.Blue) {
+                hub = Constants.BLUE_HUB_COORDINATES;
+            } else System.out.println("No hub Found");
+        }
     }
 
     public double getFlywheelVelocity(CommandSwerveDrivetrain drivetrain) {
@@ -39,6 +45,7 @@ public class ShootFuel extends Command {
 
     @Override
     public void initialize() {
+        setHub();
         flywheel.spinFlywheel(getFlywheelVelocity(drivetrain));
         hopper.setHopperVoltages(-8, -3);
     }
