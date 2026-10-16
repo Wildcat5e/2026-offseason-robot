@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
     /** Creates a new Intake. */
 
-    private final TalonFX pusherMotor = new TalonFX(16);
+    public final TalonFX pusherMotor = new TalonFX(16);
     private final TalonFX scooperMotor = new TalonFX(18);
     private final TalonFX extenderMotor = new TalonFX(17);
 
@@ -72,9 +72,9 @@ public class Intake extends SubsystemBase {
             () -> scooperMotor.setVoltage(0)); // @formatter:on
     }
 
-    public Command runPusher() {
+    public Command runPusher(double volts) {
         return startEnd( // @formatter:off
-            () -> pusherMotor.setVoltage(2),
+            () -> pusherMotor.setVoltage(volts),
             () -> pusherMotor.setVoltage(0)
         ); // @formatter: on
     }
@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase {
     
     public Command intakeFuel() {
         return startEnd( //@formatter:off
-            () -> setScooperAndPusherVoltages(5),
+            () -> setScooperAndPusherVoltages(12),
             () -> setScooperAndPusherVoltages(0)
         ); // @formatter:on
     }

@@ -39,7 +39,7 @@ import frc.robot.subsystems.PhotonVision;
 public class Robot extends TimedRobot {
     public static final double MAX_LINEAR_SPEED = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static final double MAX_ANGULAR_SPEED = 1.5 * Math.PI;
-    static final double DEADZONE = .15;
+    static final double DEADZONE = .2;
     EventLoop shooting;
     private final Intake intake = new Intake();
     private final Flywheel flywheel = new Flywheel();
@@ -76,10 +76,14 @@ public class Robot extends TimedRobot {
         }));
         controller.rightTrigger().whileTrue(new ShootFuel(flywheel, hopper, drivetrain));
         controller.leftTrigger().toggleOnTrue(intake.intakeFuel());
-        controller.rightBumper().onTrue(intake.setExtenderPositionZero());
+        controller.rightBumper().whileTrue(intake.lowerIntake());
         controller.leftBumper().whileTrue(intake.raiseIntake());
         controller.a().whileTrue(new RotateToHub(drivetrain));
         controller.b().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller.povUp().whileTrue(flywheel.increaseFlywheelMultiplier());
+        controller.povDown().whileTrue(flywheel.decreaseFlywheelMultiplier());
+        controller.povLeft().whileTrue(flywheel.decreaseFlywheelDividingConstant());
+        controller.povRight().whileTrue(flywheel.increaseFlywheelDividingConstant());
         /*
          * controller.rightTrigger().whileTrue(intake.lowerIntake());
          * controller.leftBumper().whileTrue(intake.raiseIntake());
@@ -105,6 +109,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         robotFieldWidget.setRobotPose(drivetrain.getState().Pose);
         vision.visionEst.ifPresent(est -> cameraFieldWidget.setRobotPose(est.estimatedPose.toPose2d()));
+        System.out.println("Flywheel multiplier: " + flywheel.flywheelMultiplier);
+        System.out.println("Left flywheel voltage: " + flywheel.getleftFlywheelMotorVoltage());
+        System.out.println("Right flywheel voltage: " + flywheel.getRightFlywheelMotorVoltage());
+        System.out.println("Dividing constant: " + flywheel.dividingConstant);
     }
 
     /** This function is called once when auton is enabled. */
